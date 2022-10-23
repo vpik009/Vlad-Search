@@ -22,6 +22,21 @@
         </q-input>
       </div>
 
+      <div v-else-if="noResult">
+        <q-input outlined style="full-width fixed-center q-ml-xl q-mt-lg" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
+          <template v-slot:append>
+            <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
+            <q-icon name="search" @click="console(searchText)"/>
+          </template>
+        </q-input>
+
+        <div style="width:60%; fixed-center">
+          <div>
+            <div class="text-primary text-h4 text-weight-bold text-left cursor-pointer" @click="redirect(item.url)">0 Results have been found</div>
+          </div>
+        </div>
+      </div>
+
       <div v-else-if="result">
         <q-input outlined style="full-width fixed-center q-ml-xl q-mt-lg" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
           <template v-slot:append>
@@ -52,6 +67,19 @@
             <q-icon name="search" @click="console(searchText)"/>
           </template>
         </q-input>
+      </div>
+
+      <div v-else-if="noResult">
+        <q-input outlined style=" full-width fixed-center q-ml-xl q-mt-lg" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
+          <template v-slot:append>
+            <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
+            <q-icon name="search" @click="console(searchText)"/>
+          </template>
+        </q-input>
+
+        <div style="full-width fixed-center">
+            <div class="text-primary q-ml-sm text-h6 text-weight-bold text-left cursor-pointer" @click="redirect(item.url)">0 Results have been found</div>
+        </div>
       </div>
 
       <div v-else-if="result">
@@ -767,6 +795,7 @@ export default {
   }
           },
           loading:false,
+          noResult: false,
         }
     },
 
@@ -802,6 +831,14 @@ export default {
             };
             await axios.request(options).then((response) => {
               this.result = response.data;
+
+              if(response.data.webPages == null || response.data.webPages == undefined){
+                this.noResult = true;
+              }
+              else{
+                this.noResult = false;
+              }
+
               console.log(response.data);
             }).catch(function (error) {
               console.error(error);
