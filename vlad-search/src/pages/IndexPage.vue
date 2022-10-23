@@ -4,35 +4,69 @@
     <div class="q-gutter-md row" v-if="loading">
       <q-spinner
         color="primary"
-        size="3em"
+        size="5em"
       />
     </div>
 
-    <div full-width q-ml-lg v-else-if="!result & !loading">
-      <div class="text-primary text-h2 text-weight-bold text-center q-mb-lg">Vlad-Search</div>
+    <!--DESKTOP-->
+    <div v-else-if="$q.screen.gt.lg & !loading" class="left q-mt-lg" style="width:90%;">
 
-      <q-input outlined style="width:100%;" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
-        <template v-slot:append>
-          <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
-          <q-icon name="search" @click="console(searchText)"/>
-        </template>
-      </q-input>
+      <div full-width v-if="!result">
+        <div class="text-primary text-h2 text-weight-bold text-center q-mb-lg">Vlad-Search</div>
+
+        <q-input outlined style="width:100%;" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
+          <template v-slot:append>
+            <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
+            <q-icon name="search" @click="console(searchText)"/>
+          </template>
+        </q-input>
+      </div>
+
+      <div v-else-if="result">
+        <q-input outlined style="full-width fixed-center q-ml-xl q-mt-lg" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
+          <template v-slot:append>
+            <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
+            <q-icon name="search" @click="console(searchText)"/>
+          </template>
+        </q-input>
+
+        <div style="width:60%; fixed-center">
+          <div v-for="item in pages.webPages.value" :key="item.id">
+            <div class="text-primary text-h4 text-weight-bold text-left cursor-pointer" @click="redirect(item.url)">{{ item.name }}</div>
+            <div class="text-h6 q-mb-xl q-mr-xl" style="full-width q-mr-xl" text-left q-mb-xl>{{ item.snippet }}</div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <div v-else class="left q-mt-lg " style="width:90%;">
+    <!--MOBILE-->
+    <div v-else-if="!loading" class="left q-mt-lg" style="width:90%;">
 
-      <q-input outlined style="width:70%; fixed-center q-ml-xl q-mt-lg" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
-        <template v-slot:append>
-          <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
-          <q-icon name="search" @click="console(searchText)"/>
-        </template>
-      </q-input>
+      <div full-width v-if="!result">
+        <div class="text-primary text-h2 text-weight-bold text-center q-mb-lg">Vlad-Search</div>
 
-      <div style="width:70%; fixed-center">
-        <div v-for="item in result.webPages.value" :key="item.id">
-          <div class="text-primary text-h4 text-weight-bold text-left cursor-pointer" @click="redirect(item.url)">{{ item.name }}</div>
-          <br>
-          <div class="text-h6 q-mb-xl" style="width:70%;" text-left q-mb-xl>{{ item.snippet }}</div>
+        <q-input outlined style="width:100%;" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
+          <template v-slot:append>
+            <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
+            <q-icon name="search" @click="console(searchText)"/>
+          </template>
+        </q-input>
+      </div>
+
+      <div v-else-if="result">
+        <q-input outlined style=" full-width fixed-center q-ml-xl q-mt-lg" bottom-slots v-model="searchText" label="Search..." v-on:keyup.enter="console(searchText)">
+          <template v-slot:append>
+            <q-icon v-if="searchText !== ''" name="close" @click="clear" class="cursor-pointer" />
+            <q-icon name="search" @click="console(searchText)"/>
+          </template>
+        </q-input>
+
+        <div style="full-width fixed-center">
+          <div v-for="item in pages.webPages.value" :key="item.id">
+            <div class="text-primary q-ml-sm text-h6 text-weight-bold text-left cursor-pointer" @click="redirect(item.url)">{{ item.name }}</div>
+            <div class="text-subtitle2 q-ml-sm text-weight-light q-mb-lg" style="full-width" text-left q-mb-xl>{{ item.snippet }}</div>
+          </div>
         </div>
       </div>
 
@@ -43,11 +77,15 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import router from '../router'
+import { Screen } from 'quasar'
+Screen.setSizes({ sm: 300, md: 500, lg: 1000, xl: 2000 })
 
 export default {
     name: 'App',
+
     data: function() {
         return {
           searchText: "",
@@ -742,33 +780,32 @@ export default {
         async search(input){
           if(input.length){
             console.log(input)
-
-
+            this.result="hi"
+            this.loading=true;
             //!search
-            const options = {
-              method: 'GET',
-              url: 'https://bing-web-search1.p.rapidapi.com/search',
-              params: {
-                q: input,
-                mkt: 'en-us',
-                count: 50,
-                safeSearch: 'Off',
-                textFormat: 'Raw',
-                freshness: 'Month'
-              },
-              headers: {
-                'X-BingApis-SDK': 'true',
-                'X-RapidAPI-Key': '7a7b15df43mshb4cea7ab16cc7f7p1931a7jsn1eb9bbc7d80c',
-                'X-RapidAPI-Host': 'bing-web-search1.p.rapidapi.com'
-              }
-            };
-            this.loading = true;
-            await axios.request(options).then((response) => {
-              this.result = response.data;
-              console.log(response.data);
-            }).catch(function (error) {
-              console.error(error);
-            });
+            // const options = {
+            //   method: 'GET',
+            //   url: 'https://bing-web-search1.p.rapidapi.com/search',
+            //   params: {
+            //     q: input,
+            //     mkt: 'en-us',
+            //     count: 50,
+            //     safeSearch: 'Off',
+            //     textFormat: 'Raw',
+            //     freshness: 'Month'
+            //   },
+            //   headers: {
+            //     'X-BingApis-SDK': 'true',
+            //     'X-RapidAPI-Key': '7a7b15df43mshb4cea7ab16cc7f7p1931a7jsn1eb9bbc7d80c',
+            //     'X-RapidAPI-Host': 'bing-web-search1.p.rapidapi.com'
+            //   }
+            // };
+            // await axios.request(options).then((response) => {
+            //   this.result = response.data;
+            //   console.log(response.data);
+            // }).catch(function (error) {
+            //   console.error(error);
+            // });
             this.loading = false;
 
           }
