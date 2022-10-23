@@ -31,7 +31,7 @@
         </q-input>
 
         <div style="width:60%; fixed-center">
-          <div v-for="item in pages.webPages.value" :key="item.id">
+          <div v-for="item in result.webPages.value" :key="item.id">
             <div class="text-primary text-h4 text-weight-bold text-left cursor-pointer" @click="redirect(item.url)">{{ item.name }}</div>
             <div class="text-h6 q-mb-xl q-mr-xl" style="full-width q-mr-xl" text-left q-mb-xl>{{ item.snippet }}</div>
           </div>
@@ -63,7 +63,7 @@
         </q-input>
 
         <div style="full-width fixed-center">
-          <div v-for="item in pages.webPages.value" :key="item.id">
+          <div v-for="item in result.webPages.value" :key="item.id">
             <div class="text-primary q-ml-sm text-h6 text-weight-bold text-left cursor-pointer" @click="redirect(item.url)">{{ item.name }}</div>
             <div class="text-subtitle2 q-ml-sm text-weight-light q-mb-lg" style="full-width" text-left q-mb-xl>{{ item.snippet }}</div>
           </div>
@@ -783,29 +783,29 @@ export default {
             this.result="hi"
             this.loading=true;
             //!search
-            // const options = {
-            //   method: 'GET',
-            //   url: 'https://bing-web-search1.p.rapidapi.com/search',
-            //   params: {
-            //     q: input,
-            //     mkt: 'en-us',
-            //     count: 50,
-            //     safeSearch: 'Off',
-            //     textFormat: 'Raw',
-            //     freshness: 'Month'
-            //   },
-            //   headers: {
-            //     'X-BingApis-SDK': 'true',
-            //     'X-RapidAPI-Key': '7a7b15df43mshb4cea7ab16cc7f7p1931a7jsn1eb9bbc7d80c',
-            //     'X-RapidAPI-Host': 'bing-web-search1.p.rapidapi.com'
-            //   }
-            // };
-            // await axios.request(options).then((response) => {
-            //   this.result = response.data;
-            //   console.log(response.data);
-            // }).catch(function (error) {
-            //   console.error(error);
-            // });
+            const options = {
+              method: 'GET',
+              url: 'https://bing-web-search1.p.rapidapi.com/search',
+              params: {
+                q: input,
+                mkt: 'en-us',
+                count: 50,
+                safeSearch: 'Off',
+                textFormat: 'Raw',
+                freshness: 'Month'
+              },
+              headers: {
+                'X-BingApis-SDK': 'true',
+                'X-RapidAPI-Key': '7a7b15df43mshb4cea7ab16cc7f7p1931a7jsn1eb9bbc7d80c',
+                'X-RapidAPI-Host': 'bing-web-search1.p.rapidapi.com'
+              }
+            };
+            await axios.request(options).then((response) => {
+              this.result = response.data;
+              console.log(response.data);
+            }).catch(function (error) {
+              console.error(error);
+            });
             this.loading = false;
 
           }
