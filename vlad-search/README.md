@@ -1,6 +1,6 @@
 # vlad-search (vlad-search)
 
-search engine made with google search api
+search engine made with bing search api
 
 ## Install the dependencies
 ```bash
