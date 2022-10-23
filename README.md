@@ -4,19 +4,19 @@ A small search engine project using bing's search API
 ## Viewing
 At the current stage, the project is not hosted.
 
-#### 1. 
+#### Step 1. 
 ```bash
 Clone the repository
 ```
-#### 2. 
+#### Step 2. 
 ```bash
 cd vlad-search
 ```
-#### 3. 
+#### Step 3. 
 ```bash
 npm install
 ```
-#### 4. 
+#### Step 4. 
 ```bash
 type "quasar dev" in the terminal
 ```
