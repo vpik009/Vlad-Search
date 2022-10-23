@@ -1,5 +1,5 @@
 # Vlad-Search
-A small search engine project using google's search API
+A small search engine project using bing's search API
 
 ## Viewing
 At the current stage, the project is not hosted.
