@@ -4,6 +4,7 @@ A small search engine project using bing's search API, VueJS, and Quasar
 ## Viewing
 Pages: https://vpik009.github.io/Vlad-Search/
 
+## Local
 
 #### Step 1. 
 ```bash
