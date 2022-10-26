@@ -2,7 +2,7 @@
 A small search engine project using bing's search API, VueJS, and Quasar
 
 ## Viewing
-At the current stage, the project is not hosted.
+Pages: https://vpik009.github.io/Vlad-Search/
 
 
 #### Step 1. 
